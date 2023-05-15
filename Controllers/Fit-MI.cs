@@ -7,7 +7,15 @@ namespace Fit_MI.Controllers;
 public class FitMI : ControllerBase
 {
    
-
+    private int BaseShoeSizeEU = 0;
+    private int BaseShoeSizeNA = 0;
+    private int BaseShoeSizeSA = 0;
+    private int BaseShoeSizeUK = 0;
+    private int BaseShoeSizeZA = 0;
+    private int BaseShoeSizeCH = 0;
+    private int BaseShoeSizeJP = 0;
+    private int BaseShoeSizeKR = 0;
+    private int BaseShoeSizeAU = 0;  
     private readonly ILogger<FitMIController> _logger;
 
     public FitMIController(ILogger<FitMIController> logger)
@@ -15,108 +23,171 @@ public class FitMI : ControllerBase
         _logger = logger;
     }
 
-    
-    [HttpGet]
-    public GetSize(int SuppliedShoeSize,string SuppliedUserLocation)
-    {
-       if(SuppliedShoeSize !=0 && SuppliedShoeSize != null){
+    [HttpPost]
+    public int ConvertToEurope(string MyLocation, int ShoeSize){
+        //European Shoe Size
+        if(MyLocation.Equals("EU") && ShoeSize >=0){
 
-        BaseShoeSize = SuppliedShoeSize;
-        
-            if(SuppliedUserLocation != null){
-            
-                switch (SuppliedUserLocation)
-                {
-                    case Europe:
+            int Temp = ShoeSize / 15.5;
 
-                    BaseShoeSizeEU = BaseShoeSize * 15.5;
-                    break;
+            if(Temp >= 15.5 && Temp <= 48.5){
 
-                    case North America:
-                    BaseShoeSizeNA = BaseShoeSize * 0.5;
-                    break;
+                BaseShoeSizeEU = Temp;
+            }else{
 
-                    case South America:
-
-                    if( BaseShoeSize > 3 && BaseShoeSize < 12.5){
-
-                        BaseShoeSizeSA = BaseShoeSize * 2.78;
-                    }
-                    break;
-
-                    case United Kingdom:
-
-                    BaseShoeSizeUK = BaseShoeSize;
-                    break;
-
-                    case South Africa:
-
-                    BaseShoeSizeUK = BaseShoeSize;
-                    break;
-
-                    case China:
-
-                    BaseShoeSizeCH = BaseShoeSize;
-                    break;
-
-                    case Japan:
-
-                    BaseShoeSizeJP = BaseShoeSize;
-                    break;
-
-                    case Korea:
-
-                    BaseShoeSizeKR = BaseShoeSize;
-                    break;
-
-                    case Australia:
-
-                    BaseShoeSizeAu = BaseShoeSize;
-                    break;
-                    default:
-                }
-
+                throw new System.Exception("This shoe size does not exist in Europe.");
             }
-       }
+        } 
+        return BaseShoeSizeEU;
     }
-    [HttpGet]
-    public GetCurrentLocation(){
-    //Get current location of user
+    [HttpPost]
+    public int ConvertToNorthAmerica(string MyLocation, int ShoeSize){
+
+        //North American (US & Canada) Shoe Size
+        if(MyLocation.Equals("NA") && ShoeSize >=0){
+
+            int Temp = ShoeSize / 0.5;
+
+            if(Temp >= 0.5 && Temp <= 15.5){
+
+                BaseShoeSizeNA = Temp;
+            }else{
+
+                throw new System.Exception("This shoe size does not exist in North America (United States & Canada).");
+            }
+        }
+        return BaseShoeSizeNA;
+    }
+    [HttpPost]
+    public int ConvertToSouthAmerica(string MyLocation, int ShoeSize){
+       
+        //South American (Mexico & Brazil) Shoe Size
+        if(MyLocation.Equals("SA") && ShoeSize >=0){
+           
+            int Temp = ShoeSize / 4.5;
+            
+            if(Temp >= 4.5 && Temp < 12.5){
+
+                BaseShoeSizeSA = Temp;
+            }else{
+
+                throw new System.Exception("This shoe size does not exist in South America (Mexico & Brazil).");
+            }
+        }
+        return BaseShoeSizeSA;
+    }
+
+    [HttpPost]
+    public int ConvertToUnitedKingdom(string MyLocation, int ShoeSize){
         
-    }
-    [HttpPost]
-    public ConvertToEUSize(){
-    //European Shoe Size
+        //United Kingdom (UK) Shoe Size
+        if(MyLocation.Equals("UK") && ShoeSize >=0){
 
-    }
-    [HttpPost]
-    public ConvertToNASize(){
-    //North American (US & Canada) Shoe Size
-    }
+            int Temp = ShoeSize / 0.5;
+        
+            if(Temp >=0 && Temp <=13){
 
-    [HttpPost]
-    public ConvertToSASize(){
-    //South American (US & Canada) Shoe Size
-    }
+                  BaseShoeSizeUK = Temp;
+            }else{
 
-    [HttpPost]
-    public ConvertToUKSize(){
-    //United Kingdom and South Africa (US & Canada) Shoe Size
+                throw new System.Exception("This shoe size does not exist in the United Kingdom.");
+            }
+
+        }
+        return BaseShoeSizeUK;
     }
     [HttpPost]
-    public ConvertToCHSize(){
-    //China Shoe Size
+    public int ConvertToAfrica(string MyLocation, int ShoeSize){
+    
+        //Africa (South Africa) (ZA) Shoe Size
+        if(MyLocation.Equals("AFCA") && ShoeSize >=0){
+            
+            int Temp = ShoeSize / 0.5;
+
+            if(BaseShoeSizeZA >=0 && BaseShoeSizeZA <=13){
+
+                BaseShoeSizeZA = Temp;
+            }else{
+
+                throw new System.Exception("This shoe size does not exist in the South Africa.");
+            }
+
+        }
+        return  BaseShoeSizeZA;
     }
     [HttpPost]
-    public ConvertToJPSize(){
-    //Japan Shoe Size
+    public int ConvertToCHSize(string MyLocation, int ShoeSize){
+    
+        //China Shoe Size
+        if(MyLocation.Equals("CH") && ShoeSize >=0){
+
+            int Temp = ShoeSize / 35.5;
+
+            if(Temp >=35 && Temp <=48){
+                   
+                   BaseShoeSizeCH = Temp;
+            }else{
+
+                throw new System.Exception("This shoe size does not exist in the China.");
+            }
+
+        }
+        return BaseShoeSizeCH;
     }
     [HttpPost]
-    public ConvertToKRSize(){
-    //Korean Shoe Size
+    public int ConvertToJPSize(string MyLocation, int ShoeSize){
+        
+        //Japan Shoe Size
+        if(MyLocation.Equals("JP") && ShoeSize >=0){
+
+            int Temp = ShoeSize / 21;
+
+            if(BaseShoeSizeJP >=21 && BaseShoeSizeJP <=31.5){
+
+                  BaseShoeSizeJP = Temp;
+            }else{
+
+                throw new System.Exception("This shoe size does not exist in the Japan.");
+            }
+
+        }
+        return BaseShoeSizeJP;
     }
     [HttpPost]
-    public ConvertToAUSize(){
-    //Australia Shoe Size
+    public int ConvertToKRSize(){
+        
+         //Korean Shoe Size
+         if(MyLocation.Equals("KR") && ShoeSize >=0){
+            
+            int Temp = ShoeSize / 228;
+           
+            if(BaseShoeSizeKR >=228 && BaseShoeSizeKR <=292){
+                  BaseShoeSizeKR = Temp;
+            }else{
+
+                throw new System.Exception("This shoe size does not exist in the Korea.");
+            }
+
+        }
+        return BaseShoeSizeKR;
+    }
+    [HttpPost]
+    public int ConvertToAUSize(){
+    
+        //Australia Shoe Size
+        if(MyLocation.Equals("AU") && ShoeSize >=0){
+            
+            int Temp = ShoeSize / 0.5;
+            
+            if(BaseShoeSizeAU >=0 && BaseShoeSizeAU <=13){
+                  
+                  BaseShoeSizeAU = Temp;
+            }else{
+
+                throw new System.Exception("This shoe size does not exist in the Australia.");
+            }
+
+        }
+        return BaseShoeSizeAU;
     }
 }
